@@ -2,10 +2,8 @@ package br.com.dti;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -196,8 +193,8 @@ public class GameController {
         	conteudo = conteudoArquivo(id);
         	jogador = retornarJogador(conteudo);
         	if((!jogador.equals(player)   && conteudo.size()==1) 
-        			|| (!jogador.equals(player) && conteudo.size()>1)){
-        		resultado.put("msg", "Não é turno do jogador" +  conteudo.size());
+        			|| (jogador.equals(player) && conteudo.size()>1)){
+        		resultado.put("msg", "Não é turno do jogador" );
         	}
         	else if((jogador.equals(player) && conteudo.size()==1) 
         			||( !jogador.equals(player) && conteudo.size()>1 && conteudo.size()<9)){
@@ -207,6 +204,9 @@ public class GameController {
         	else if( !jogador.equals(player) && conteudo.size()>=9){
         		realizarJogada(id,player,positionX,positionY);
         		resultado= checarResultado(id);
+        	}
+        	else if( jogador.equals(player) && conteudo.size()>=9){
+        		resultado.put("msg", "Não é turno do jogador" );
         	}
         }
         else {
